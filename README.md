@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+# Movie Recommendation App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+This is a **React-based movie recommendation application** that fetches movie data from **The Movie Database (TMDB) API** and allows users to search for movies by title. The app displays a list of movies along with their details such as title, overview, and poster.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Search Movies**: Users can search for movies by typing a keyword.
+- **Recommendations**: Recommends similar movies
+- **Movie Details**: Displays movie titles, overviews, and posters.
+- **Dynamic Rendering**: Uses React components to display search results dynamically.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React.js** - Frontend framework
+- **Axios** - For API requests
+- **React Router** - For navigation
+- **TMDB API** - Fetching movie data
 
-### `npm test`
+## Installation and Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+Make sure you have the following installed:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (v14+ recommended)
+- npm or yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Steps to Run the Project
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone the Repository**
 
-### `npm run eject`
+   ```bash
+   git clone https://github.com/your-username/movie-recommendation-app.git
+   cd movie-recommendation-app
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Install Dependencies**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   npm install  # or yarn install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. **Create a ********************`.env`******************** File (Optional)**
+   If you want to store your API key separately, create a `.env` file and add:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```
+   REACT_APP_TMDB_API_KEY=your_api_key_here
+   ```
 
-## Learn More
+   Then update API calls to:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```js
+   const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. **Start the Development Server**
 
-### Code Splitting
+   ```bash
+   npm start  # or yarn start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+5. **Open in Browser**
+   The application will be available at:
 
-### Analyzing the Bundle Size
+   ```
+   http://localhost:3000
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## API Usage
 
-### Making a Progressive Web App
+The app fetches movie data using the TMDB API. The search endpoint:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&language=en-US&page=1&include_adult=false&query=SEARCH_TERM
+```
 
-### Advanced Configuration
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+movie-recommendation-app/
+│── src/
+│   ├── components/
+│   │   ├── Search.js
+│   │   ├── Card.js
+│   ├── App.js
+│   ├── index.js
+│── public/
+│── package.json
+│── README.md
+```
 
-### Deployment
+## Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Common Errors and Fixes
 
-### `npm run build` fails to minify
+1. **API Not Working (404 Error)**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   - Ensure the API key is valid.
+   - Check the API URL format.
+   - Log the API response in `console.log()` to debug.
+
+2. **Search Results Not Displaying**
+
+   - Ensure `this.props.match.params.term` is correctly passed.
+   - Check React Router setup.
+   - Debug with `console.log(SearchTerm);`
+
+## Future Enhancements
+
+- Add **pagination** for search results.
+- Implement **movie recommendations** based on user search.
+- Improve **UI/UX with better styling**.
+
+## License
+
+This project is open-source and available under the **MIT License**.
+
+---
+
+**Developed by Ningaraddi Raddi**
+
