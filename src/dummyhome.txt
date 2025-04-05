@@ -1,0 +1,96 @@
+import React, { Component } from 'react'
+import Contacts from './contacts';
+import firebase from 'firebase'
+import fire from './firebase_config'
+
+
+import Profile from './profile';
+import UsersList from './usersList';
+import Chat from './chat'
+
+
+class Home extends Component {
+    state = {
+        flag: 0,
+        chatFlag: 0,
+        name:"",
+        dp:"",
+        uuid:""
+    }
+    componentDidMount() {
+
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log(user)
+
+            } else {
+                console.log("not logged in")
+                this.props.history.push('/login')
+
+            }
+        });
+    }
+    loadchatComponent() {
+        if (this.state.chatFlag === 0) {
+            return <h1 className='text-centre'>click profile to view the chat </h1>
+        }
+        else {
+            return <Chat name={this.state.name} dp={this.state.dp} uuid={this.state.uuid}/>
+        }
+    }
+    loadComponent() {
+        if (this.state.flag === 0) {
+            return <Contacts onIconclick={this.replaceComponent.bind(this)} />
+
+
+        }
+        else if (this.state.flag === 1) {
+            return <Profile onButtonClick={this.replaceComponent.bind(this)} />
+        }
+        else {
+            return <UsersList onThreadClick={this.replaceChatComponent.bind(this)} onButtonClick={this.replaceComponent.bind(this)} />
+        }
+    }
+
+    replaceChatComponent(chatFlag,name,dp,uuid) {
+        //this.setState({ chatFlag: chatFlag })
+        
+        this.setState({ chatFlag: chatFlag ,name:name,dp:dp,uuid:uuid})
+
+    }
+    replaceComponent(flag) {
+        this.setState({ flag: flag })
+
+    }
+    render() {
+        return (
+            <div className='container'>
+                <div className='row'>
+                    <div className='col-12'>
+
+                        <div className='card' style={{ height: "700px" }}>
+                            <div className='card-body'>
+                                <div className='row'>
+                                    <div className='col-4' style={{ borderRight: "1px #e2e2e2 solid" }}>
+                                        {this.loadComponent()}
+                                        
+
+                                    </div>
+                                    <div className='col-8'>
+                                        {this.loadchatComponent()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        )
+    }
+}
+
+export default Home;

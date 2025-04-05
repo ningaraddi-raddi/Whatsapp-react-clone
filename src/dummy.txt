@@ -1,0 +1,93 @@
+import React, { Component } from 'react'
+import firebase from 'firebase'
+
+class Chat extends Component {
+    state = {
+        chatHistory: {}
+    }
+
+    loadChatHistory() {
+        return Object.keys(this.state.chatHistory).map((key) => {
+            if ((this.state.chatHistory[key]['sender'] === localStorage.getItem('user_id') && this.state.chatHistory[key]['reciever'] === this.props.uuid) || (this.state.chatHistory[key]['sender'] === this.props.uuid && this.state.chatHistory[key]['reciever'] === localStorage.getItem('user_id'))) {
+                if(this.state.chatHistory[key]['sender'] === localStorage.getItem('user_id')) {
+                return <div className='mt-3 p-2'>
+                    <span style={{backgroundColor:"#fff",fontSize:18}} className=' mb-1 font-weight-bold float-right'>{ this.state.chatHistory[key]['text']}</span></div>
+            }
+            else{
+                return <div className='mt-3 '>
+                    <span style={{backgroundColor:"#FEF5DC",fontSize:18}} className='p-2  mt-3 font-weight-bold'>{ this.state.chatHistory[key]['text']}</span></div>
+            }}
+                
+
+
+            
+           
+        })
+    }
+
+    componentDidMount() {
+        //fetch the chat history between these two users 
+        firebase.database().ref('messages/').on('value', (snapshot) => {
+            console.log(snapshot.val())
+            this.setState({ chatHistory: snapshot.val() })
+        })
+    }
+
+    sendMessage() {
+        let messageText = document.querySelector("#messageText").value;
+        let reciever = this.props.uuid;
+      
+        let database = firebase.database();
+        database.ref('messages/').push().set({
+            sender: localStorage.getItem('user_id'),
+            reciever: reciever,
+            text: messageText,
+            timestamp:firebase.database.ServerValue.TIMESTAMP
+        });
+       
+
+        //add recent chat to sender and reciever
+        database.ref('users/' + localStorage.getItem('user_id') + '/recentChats/' + reciever).update({
+           
+           text: messageText,
+            timestamp:firebase.database.ServerValue.TIMESTAMP
+        });
+        database.ref('users/' + reciever+ '/recentChats/' + localStorage.getItem('user_id')).update({
+      
+           
+           text: messageText,
+            timestamp:firebase.database.ServerValue.TIMESTAMP
+        });
+
+         document.querySelector("#messageText").value = ""
+
+
+    }
+    render() {
+        return (
+            <div className='row'>
+
+                <div className='col-12 ' style={{ height: '50px', backgroundColor: 'green' }}>
+                    <h5 className='mt-2 d-flex'><img onClick={() => this.onIconclick()} src={this.props.dp} className=' rounded-circle float-right' style={{ width: 25, height: 25 }}></img><span className='ml-2 text-white'>{this.props.name}</span></h5>
+                </div>
+
+                <div className='col-12' style={{ height: "600px", border: "1px rgb(6, 5, 5)", backgroundColor: "#e2e2e2" }}>
+                    {this.loadChatHistory()}
+                </div>
+
+                <div className='col-12'>
+                    <textarea id="messageText" cols="80" rows="1" style={{ marginLeft: "-15" }} placeholder='Type a message'></textarea>
+                    <button onClick={this.sendMessage.bind(this)} className='btn btn-secondary btn-lg' style={{ marginBlockEnd: "10" }}>
+                        Send
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        )
+    }
+}
+
+export default Chat
